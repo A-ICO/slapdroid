@@ -88,6 +88,24 @@
     #accel-title { font-size: 11px; color: #ffe0f0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
     #accel-track { height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; overflow: hidden; }
     #accel-fill { height: 100%; width: 0%; background: #fff; transition: width 0.08s; border-radius: 3px; }
+
+    body { transition: background 0.5s; }
+    body.goat-mode { background: #7dc22e !important; }
+    #unlock-screen { transition: background 0.5s; }
+    #unlock-screen.goat-mode { background: #7dc22e !important; }
+    #swap-btn {
+      width: 100%; max-width: 400px;
+      padding: 14px 20px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 50px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #swap-btn:active { transform: scale(0.97); }
   </style>
 </head>
 <body>
@@ -104,9 +122,9 @@
     <span id="status-text">Appuie sur Activer...</span>
   </div>
 
-<div id="slap-zone">
-  <img src="/slapdroid/WAIFU.jpg" style="width:220px; height:220px; border-radius:50%; object-fit:cover;">
-</div>
+  <div id="slap-zone">
+    <img src="https://promptsideas.b-cdn.net/prompts/8594/e5IzFR_9OHeOewLEqkKr.png" style="width:220px; height:220px; border-radius:50%; object-fit:cover;">
+  </div>
 
   <div id="stat-card">
     <div class="stat-label">Baffes totales</div>
@@ -117,6 +135,8 @@
     <div id="accel-title">Capteur en direct</div>
     <div id="accel-track"><div id="accel-fill"></div></div>
   </div>
+
+  <button id="swap-btn" onclick="toggleMode()">🐐 Passer en mode <strong style="margin-left:4px">Chèvres</strong></button>
 
 <script>
 const soundsB64 = [
@@ -167,9 +187,36 @@ function startListening() {
   document.getElementById('status-text').textContent = "Actif — frappe ton téléphone n'importe où !";
 }
 
+let goatMode = false;
+
+function toggleMode() {
+  goatMode = !goatMode;
+  const body = document.body;
+  const unlockScreen = document.getElementById('unlock-screen');
+  const img = document.querySelector('#slap-zone img');
+  const btn = document.getElementById('swap-btn');
+  const unlockBtn = document.getElementById('unlock-btn');
+  if (goatMode) {
+    body.classList.add('goat-mode');
+    unlockScreen.classList.add('goat-mode');
+    img.src = '/slapdroid/ChatGPT_Image_28_mars_2026__14_54_58.png';
+    btn.innerHTML = '😈 Passer en mode <strong style="margin-left:4px">Gémissements</strong>';
+    unlockBtn.style.color = '#5fa31f';
+  } else {
+    body.classList.remove('goat-mode');
+    unlockScreen.classList.remove('goat-mode');
+    img.src = '/slapdroid/WAIFU.jpg';
+    btn.innerHTML = '🐐 Passer en mode <strong style="margin-left:4px">Chèvres</strong>';
+    unlockBtn.style.color = '#ff69b4';
+  }
+}
+
 function playSound() {
   if (!unlocked) return;
-  const audio = new Audio(pickSound());
+  const src = goatMode
+    ? '/slapdroid/Goat_Screaming_Meme_-_Sound_Effect__HD_.mp3'
+    : pickSound();
+  const audio = new Audio(src);
   audio.play().catch(() => {});
 }
 
