@@ -123,7 +123,7 @@
   </div>
 
   <div id="slap-zone">
-    <img src="https://promptsideas.b-cdn.net/prompts/8594/e5IzFR_9OHeOewLEqkKr.png" style="width:220px; height:220px; border-radius:50%; object-fit:cover;">
+    <img src="/slapdroid/WAIFU.jpg" style="width:220px; height:220px; border-radius:50%; object-fit:cover;">
   </div>
 
   <div id="stat-card">
@@ -199,7 +199,7 @@ function toggleMode() {
   if (goatMode) {
     body.classList.add('goat-mode');
     unlockScreen.classList.add('goat-mode');
-    img.src = '/slapdroid/ChatGPT_Image_28_mars_2026__14_54_58.png';
+    img.src = '/slapdroid/ChatGPT%20Image%2028%20mars%202026%2C%2014_54_58.png';
     btn.innerHTML = '😈 Passer en mode <strong style="margin-left:4px">Gémissements</strong>';
     unlockBtn.style.color = '#5fa31f';
   } else {
@@ -214,7 +214,7 @@ function toggleMode() {
 function playSound() {
   if (!unlocked) return;
   const src = goatMode
-    ? '/slapdroid/Goat_Screaming_Meme_-_Sound_Effect__HD_.mp3'
+    ? '/slapdroid/Goat%20Screaming%20Meme%20-%20Sound%20Effect%20(HD).mp3'
     : pickSound();
   const audio = new Audio(src);
   audio.play().catch(() => {});
