@@ -19,6 +19,31 @@
     }
     h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
     h1 span { color: #ffe0f0; font-weight: 400; font-size: 14px; display: block; margin-top: 2px; }
+
+    #unlock-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #ff69b4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      z-index: 999;
+    }
+    #unlock-screen h2 { font-size: 24px; font-weight: 600; text-align: center; }
+    #unlock-screen p { font-size: 14px; color: #ffe0f0; text-align: center; padding: 0 32px; }
+    #unlock-btn {
+      padding: 16px 40px;
+      background: #fff;
+      color: #ff69b4;
+      border: none;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
     #status-bar {
       width: 100%; max-width: 400px;
       background: rgba(255,255,255,0.2);
@@ -37,23 +62,20 @@
     }
     #status-dot.active { background: #fff; box-shadow: 0 0 6px #fff; }
     #status-dot.slap   { background: #ff1493; box-shadow: 0 0 8px #ff1493; }
+
     #slap-zone {
       width: 220px; height: 220px;
       border-radius: 50%;
       border: 3px solid rgba(255,255,255,0.5);
       background: rgba(255,255,255,0.15);
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: transform 0.1s, filter 0.1s;
-      user-select: none;
-      -webkit-user-select: none;
       overflow: hidden;
+      transition: transform 0.1s, filter 0.1s;
     }
-    #slap-zone:active { transform: scale(0.93); }
     #slap-zone.slapped { transform: scale(0.9); filter: brightness(1.2); }
+
     #counter-row { display: flex; gap: 12px; width: 100%; max-width: 400px; }
     .stat-card {
       flex: 1; background: rgba(255,255,255,0.2); border-radius: 10px;
@@ -61,6 +83,7 @@
     }
     .stat-label { font-size: 11px; color: #ffe0f0; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
     .stat-value { font-size: 26px; font-weight: 600; color: #fff; }
+
     #accel-bar {
       width: 100%; max-width: 400px;
       background: rgba(255,255,255,0.2); border-radius: 10px;
@@ -69,47 +92,38 @@
     #accel-title { font-size: 11px; color: #ffe0f0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
     #accel-track { height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; overflow: hidden; }
     #accel-fill { height: 100%; width: 0%; background: #fff; transition: width 0.08s; border-radius: 3px; }
+
     #sensitivity-row { width: 100%; max-width: 400px; }
     #sens-label { font-size: 13px; color: #ffe0f0; margin-bottom: 8px; }
     #sens-track { display: flex; align-items: center; gap: 12px; }
     #sens-track input[type=range] { flex: 1; accent-color: #fff; }
     #sens-val { font-size: 13px; font-weight: 600; min-width: 28px; color: #fff; }
+
     #cooldown-row { width: 100%; max-width: 400px; }
     #cd-label { font-size: 13px; color: #ffe0f0; margin-bottom: 8px; }
     #cd-track { display: flex; align-items: center; gap: 12px; }
     #cd-track input[type=range] { flex: 1; accent-color: #fff; }
     #cd-val { font-size: 13px; font-weight: 600; min-width: 44px; color: #fff; }
-    #permission-banner {
-      width: 100%; max-width: 400px;
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 10px; padding: 14px;
-      font-size: 13px; color: #fff; display: none;
-    }
-    #permission-banner button {
-      margin-top: 10px; padding: 8px 16px;
-      background: #fff; color: #ff69b4; border: none;
-      border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
-    }
   </style>
 </head>
 <body>
 
-  <h1>SlapDroid 👋 <span>Frappe ton téléphone. Il répond.</span></h1>
-
-  <div id="permission-banner">
-    <strong>Permission requise (iOS/Safari)</strong><br>
-    Clique pour autoriser l'accéléromètre.
-    <br><button onclick="requestPermission()">Autoriser le capteur</button>
+  <!-- Écran de démarrage — 1 seul tap pour tout débloquer -->
+  <div id="unlock-screen">
+    <h2>SlapDroid 👋</h2>
+    <p>Appuie une fois pour activer le capteur et le son. Ensuite plus besoin de toucher l'écran !</p>
+    <button id="unlock-btn" onclick="unlock()">🎤 Activer</button>
   </div>
+
+  <h1>SlapDroid 👋 <span>Frappe ton téléphone. Il répond.</span></h1>
 
   <div id="status-bar">
     <div id="status-dot"></div>
     <span id="status-text">Initialisation...</span>
   </div>
 
-  <div id="slap-zone" onclick="manualSlap()">
-    <img id="slap-img" src="https://promptsideas.b-cdn.net/prompts/8594/e5IzFR_9OHeOewLEqkKr.png" style="width:220px; height:220px; border-radius:50%; object-fit:cover;">
+  <div id="slap-zone">
+    <img src="https://promptsideas.b-cdn.net/prompts/8594/e5IzFR_9OHeOewLEqkKr.png" style="width:220px; height:220px; border-radius:50%; object-fit:cover;">
   </div>
 
   <div id="counter-row">
@@ -154,6 +168,36 @@ let maxIntensity = 0;
 let lastSlap = 0;
 let lastMag = 0;
 
+function unlock() {
+  // Débloque le son (obligation navigateur mobile)
+  ctx = new AudioCtx();
+  const buf = ctx.createBuffer(1, 1, 22050);
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.connect(ctx.destination);
+  src.start();
+
+  // Cache l'écran de démarrage
+  document.getElementById('unlock-screen').style.display = 'none';
+
+  // Démarre le capteur
+  if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+    // iOS
+    DeviceMotionEvent.requestPermission().then(state => {
+      if (state === 'granted') startListening();
+      else setStatus('Permission refusée :(', false);
+    });
+  } else {
+    startListening();
+  }
+}
+
+function startListening() {
+  window.addEventListener('devicemotion', handleMotion, true);
+  document.getElementById('status-dot').className = 'active';
+  document.getElementById('status-text').textContent = 'Actif — frappe ton téléphone n\'importe où !';
+}
+
 function getCtx() {
   if (!ctx) ctx = new AudioCtx();
   if (ctx.state === 'suspended') ctx.resume();
@@ -194,10 +238,6 @@ function triggerSlap(intensity) {
   playSound(intensity);
 }
 
-function manualSlap() { triggerSlap(22 + Math.random() * 18); }
-function updateSens(v) { sensitivity = parseFloat(v); document.getElementById('sens-val').textContent = Math.round(v); }
-function updateCd(v) { cooldown = parseInt(v); document.getElementById('cd-val').textContent = v + ' ms'; }
-
 function handleMotion(e) {
   const acc = e.accelerationIncludingGravity || e.acceleration;
   if (!acc) return;
@@ -209,34 +249,11 @@ function handleMotion(e) {
   if (delta > sensitivity) triggerSlap(delta);
 }
 
-function requestPermission() {
-  DeviceMotionEvent.requestPermission().then(state => {
-    if (state === 'granted') startListening();
-    else setStatus('Permission refusée :(', false);
-  });
-}
-
-function startListening() {
-  window.addEventListener('devicemotion', handleMotion, true);
-  document.getElementById('status-dot').className = 'active';
-  document.getElementById('status-text').textContent = 'Capteur actif — frappe ton téléphone !';
-  document.getElementById('permission-banner').style.display = 'none';
-}
-
+function updateSens(v) { sensitivity = parseFloat(v); document.getElementById('sens-val').textContent = Math.round(v); }
+function updateCd(v) { cooldown = parseInt(v); document.getElementById('cd-val').textContent = v + ' ms'; }
 function setStatus(msg, active) {
   document.getElementById('status-text').textContent = msg;
   document.getElementById('status-dot').className = active ? 'active' : '';
-}
-
-if (typeof DeviceMotionEvent !== 'undefined') {
-  if (typeof DeviceMotionEvent.requestPermission === 'function') {
-    document.getElementById('permission-banner').style.display = 'block';
-    setStatus('Clique le bouton rose pour activer', false);
-  } else {
-    startListening();
-  }
-} else {
-  setStatus('Accéléromètre non dispo — clique le cercle !', false);
 }
 </script>
 </body>
