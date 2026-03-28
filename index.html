@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>SlapDroid 👋</title>
+  <title>SlapMe 😈</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -17,8 +17,8 @@
       padding: 24px 16px;
       gap: 20px;
     }
-    h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
-    h1 span { color: #ffe0f0; font-weight: 400; font-size: 14px; display: block; margin-top: 2px; }
+    h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; text-align: center; }
+    h1 span { color: #ffe0f0; font-weight: 400; font-size: 14px; display: block; margin-top: 2px; text-align: center; }
 
     #unlock-screen {
       position: fixed;
@@ -108,18 +108,17 @@
 </head>
 <body>
 
-  <!-- Écran de démarrage — 1 seul tap pour tout débloquer -->
   <div id="unlock-screen">
-    <h2>SlapDroid 👋</h2>
+    <h2>SlapMe 😈</h2>
     <p>Appuie une fois pour activer le capteur et le son. Ensuite plus besoin de toucher l'écran !</p>
-    <button id="unlock-btn" onclick="unlock()">🎤 Activer</button>
+    <button id="unlock-btn" onclick="unlock()">😈 Activer</button>
   </div>
 
-  <h1>SlapDroid 👋 <span>Frappe ton téléphone. Il répond.</span></h1>
+  <h1>SlapMe 😈 <span>Frappe ton téléphone. Il répond.</span></h1>
 
   <div id="status-bar">
     <div id="status-dot"></div>
-    <span id="status-text">Initialisation...</span>
+    <span id="status-text">Appuie sur Activer...</span>
   </div>
 
   <div id="slap-zone">
@@ -159,33 +158,47 @@
   </div>
 
 <script>
-const AudioCtx = window.AudioContext || window.webkitAudioContext;
-let ctx = null;
+// Liste des sons — ils sont dans le même dossier que index.html sur GitHub
+const sounds = [
+  'SF-breathe.mp3',
+  'SF-huum.mp3',
+  'SF-humm.mp3',
+  'sf_gemissement_01.mp3',
+  'SF-ok.mp3',
+  'SF-gemiss.mp3',
+  'SF-1gemissement.mp3'
+];
+
+// Système de tirage aléatoire équitable (shuffle)
+let bag = [];
+function pickSound() {
+  if (bag.length === 0) {
+    bag = [...sounds];
+    // Mélange le sac
+    for (let i = bag.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [bag[i], bag[j]] = [bag[j], bag[i]];
+    }
+  }
+  return bag.pop();
+}
+
 let sensitivity = 18;
 let cooldown = 600;
 let totalSlaps = 0;
 let maxIntensity = 0;
 let lastSlap = 0;
 let lastMag = 0;
+let unlocked = false;
 
 function unlock() {
-  // Débloque le son (obligation navigateur mobile)
-  ctx = new AudioCtx();
-  const buf = ctx.createBuffer(1, 1, 22050);
-  const src = ctx.createBufferSource();
-  src.buffer = buf;
-  src.connect(ctx.destination);
-  src.start();
-
-  // Cache l'écran de démarrage
+  unlocked = true;
   document.getElementById('unlock-screen').style.display = 'none';
 
-  // Démarre le capteur
   if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-    // iOS
     DeviceMotionEvent.requestPermission().then(state => {
       if (state === 'granted') startListening();
-      else setStatus('Permission refusée :(', false);
+      else setStatus('Permission refusée :(');
     });
   } else {
     startListening();
@@ -198,26 +211,11 @@ function startListening() {
   document.getElementById('status-text').textContent = 'Actif — frappe ton téléphone n\'importe où !';
 }
 
-function getCtx() {
-  if (!ctx) ctx = new AudioCtx();
-  if (ctx.state === 'suspended') ctx.resume();
-  return ctx;
-}
-
-function playSound(intensity) {
-  const c = getCtx();
-  const vol = Math.min(intensity / 40, 1);
-  [0, 0.05].forEach((delay, i) => {
-    const o = c.createOscillator();
-    const env = c.createGain();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(200 - i * 20 + Math.random() * 80, c.currentTime + delay);
-    o.frequency.exponentialRampToValueAtTime(70 + Math.random() * 30, c.currentTime + delay + 0.55);
-    env.gain.setValueAtTime(vol * (i === 0 ? 0.8 : 0.5), c.currentTime + delay);
-    env.gain.exponentialRampToValueAtTime(0.001, c.currentTime + delay + 0.6);
-    o.connect(env); env.connect(c.destination);
-    o.start(c.currentTime + delay); o.stop(c.currentTime + delay + 0.6);
-  });
+function playSound() {
+  if (!unlocked) return;
+  const file = pickSound();
+  const audio = new Audio(file);
+  audio.play().catch(() => {});
 }
 
 function triggerSlap(intensity) {
@@ -235,25 +233,30 @@ function triggerSlap(intensity) {
   const dot = document.getElementById('status-dot');
   dot.className = 'slap';
   setTimeout(() => dot.className = 'active', 350);
-  playSound(intensity);
+  playSound();
 }
 
 function handleMotion(e) {
   const acc = e.accelerationIncludingGravity || e.acceleration;
   if (!acc) return;
   const x = acc.x || 0, y = acc.y || 0, z = acc.z || 0;
-  const mag = Math.sqrt(x*x + y*y + z*z);
+  const mag = Math.sqrt(x * x + y * y + z * z);
   const delta = Math.abs(mag - lastMag);
   lastMag = mag;
   document.getElementById('accel-fill').style.width = Math.min(delta / 40 * 100, 100) + '%';
   if (delta > sensitivity) triggerSlap(delta);
 }
 
-function updateSens(v) { sensitivity = parseFloat(v); document.getElementById('sens-val').textContent = Math.round(v); }
-function updateCd(v) { cooldown = parseInt(v); document.getElementById('cd-val').textContent = v + ' ms'; }
-function setStatus(msg, active) {
+function updateSens(v) {
+  sensitivity = parseFloat(v);
+  document.getElementById('sens-val').textContent = Math.round(v);
+}
+function updateCd(v) {
+  cooldown = parseInt(v);
+  document.getElementById('cd-val').textContent = v + ' ms';
+}
+function setStatus(msg) {
   document.getElementById('status-text').textContent = msg;
-  document.getElementById('status-dot').className = active ? 'active' : '';
 }
 </script>
 </body>
