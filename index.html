@@ -8,7 +8,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0f0f0f;
+      background: #ff69b4;
       color: #fff;
       min-height: 100vh;
       display: flex;
@@ -18,87 +18,77 @@
       gap: 20px;
     }
     h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
-    h1 span { color: #888; font-weight: 400; font-size: 14px; display: block; margin-top: 2px; }
+    h1 span { color: #ffe0f0; font-weight: 400; font-size: 14px; display: block; margin-top: 2px; }
     #status-bar {
       width: 100%; max-width: 400px;
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
       border-radius: 12px;
       padding: 12px 16px;
       display: flex;
       align-items: center;
       gap: 10px;
       font-size: 13px;
-      color: #aaa;
+      color: #fff;
     }
     #status-dot {
       width: 10px; height: 10px; border-radius: 50%;
-      background: #444; flex-shrink: 0; transition: background 0.2s;
+      background: rgba(255,255,255,0.4); flex-shrink: 0; transition: background 0.2s;
     }
-    #status-dot.active { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
-    #status-dot.slap   { background: #f97316; box-shadow: 0 0 8px #f97316; }
+    #status-dot.active { background: #fff; box-shadow: 0 0 6px #fff; }
+    #status-dot.slap   { background: #ff1493; box-shadow: 0 0 8px #ff1493; }
     #slap-zone {
-      width: 200px; height: 200px;
+      width: 220px; height: 220px;
       border-radius: 50%;
-      border: 2px solid #2a2a2a;
-      background: #1a1a1a;
+      border: 3px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.15);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: transform 0.1s, background 0.1s, border-color 0.1s;
+      transition: transform 0.1s, filter 0.1s;
       user-select: none;
       -webkit-user-select: none;
+      overflow: hidden;
     }
     #slap-zone:active { transform: scale(0.93); }
-    #slap-zone.slapped { background: #1f0d00; border-color: #f97316; transform: scale(0.9); }
-    #slap-emoji { font-size: 52px; }
-    #slap-label { font-size: 13px; color: #666; margin-top: 8px; }
+    #slap-zone.slapped { transform: scale(0.9); filter: brightness(1.2); }
     #counter-row { display: flex; gap: 12px; width: 100%; max-width: 400px; }
     .stat-card {
-      flex: 1; background: #1a1a1a; border-radius: 10px;
-      padding: 14px; text-align: center; border: 1px solid #2a2a2a;
+      flex: 1; background: rgba(255,255,255,0.2); border-radius: 10px;
+      padding: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.3);
     }
-    .stat-label { font-size: 11px; color: #666; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .stat-value { font-size: 26px; font-weight: 600; }
+    .stat-label { font-size: 11px; color: #ffe0f0; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-value { font-size: 26px; font-weight: 600; color: #fff; }
     #accel-bar {
       width: 100%; max-width: 400px;
-      background: #1a1a1a; border-radius: 10px;
-      padding: 12px 14px; border: 1px solid #2a2a2a;
+      background: rgba(255,255,255,0.2); border-radius: 10px;
+      padding: 12px 14px; border: 1px solid rgba(255,255,255,0.3);
     }
-    #accel-title { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-    #accel-track { height: 6px; background: #2a2a2a; border-radius: 3px; overflow: hidden; }
-    #accel-fill { height: 100%; width: 0%; background: #3b82f6; transition: width 0.08s; border-radius: 3px; }
+    #accel-title { font-size: 11px; color: #ffe0f0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    #accel-track { height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; overflow: hidden; }
+    #accel-fill { height: 100%; width: 0%; background: #fff; transition: width 0.08s; border-radius: 3px; }
     #sensitivity-row { width: 100%; max-width: 400px; }
-    #sens-label { font-size: 13px; color: #aaa; margin-bottom: 8px; }
+    #sens-label { font-size: 13px; color: #ffe0f0; margin-bottom: 8px; }
     #sens-track { display: flex; align-items: center; gap: 12px; }
-    #sens-track input[type=range] { flex: 1; accent-color: #3b82f6; }
+    #sens-track input[type=range] { flex: 1; accent-color: #fff; }
     #sens-val { font-size: 13px; font-weight: 600; min-width: 28px; color: #fff; }
-    #packs { width: 100%; max-width: 400px; }
-    #packs-title { font-size: 13px; color: #aaa; margin-bottom: 10px; }
-    #packs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .pack-btn {
-      padding: 11px 12px; border: 1px solid #2a2a2a; border-radius: 10px;
-      background: #1a1a1a; cursor: pointer; font-size: 13px;
-      color: #ccc; text-align: left; transition: background 0.15s, border-color 0.15s;
-    }
-    .pack-btn:hover { background: #222; }
-    .pack-btn.selected { border-color: #3b82f6; background: #0d1f3c; color: #93c5fd; }
     #cooldown-row { width: 100%; max-width: 400px; }
-    #cd-label { font-size: 13px; color: #aaa; margin-bottom: 8px; }
+    #cd-label { font-size: 13px; color: #ffe0f0; margin-bottom: 8px; }
     #cd-track { display: flex; align-items: center; gap: 12px; }
-    #cd-track input[type=range] { flex: 1; accent-color: #a855f7; }
+    #cd-track input[type=range] { flex: 1; accent-color: #fff; }
     #cd-val { font-size: 13px; font-weight: 600; min-width: 44px; color: #fff; }
     #permission-banner {
       width: 100%; max-width: 400px;
-      background: #1c1500; border: 1px solid #854f0b;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
       border-radius: 10px; padding: 14px;
-      font-size: 13px; color: #fbbf24; display: none;
+      font-size: 13px; color: #fff; display: none;
     }
     #permission-banner button {
       margin-top: 10px; padding: 8px 16px;
-      background: #854f0b; color: white; border: none;
+      background: #fff; color: #ff69b4; border: none;
       border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
     }
   </style>
@@ -119,9 +109,8 @@
   </div>
 
   <div id="slap-zone" onclick="manualSlap()">
-    <img id="slap-img" src="https://promptsideas.b-cdn.net/prompts/8594/e5IzFR_9OHeOewLEqkKr.png" style="width:160px; height:160px; border-radius:50%; object-fit:cover;">
-    <span id="slap-label">Frappe ton téléphone !</span>
-</div>
+    <img id="slap-img" src="https://promptsideas.b-cdn.net/prompts/8594/e5IzFR_9OHeOewLEqkKr.png" style="width:220px; height:220px; border-radius:50%; object-fit:cover;">
+  </div>
 
   <div id="counter-row">
     <div class="stat-card">
@@ -155,16 +144,6 @@
     </div>
   </div>
 
-  <div id="packs">
-    <div id="packs-title">Pack de sons</div>
-    <div id="packs-grid">
-      <button class="pack-btn selected" onclick="selectPack(this,'moan')">😩 Gémissements</button>
-      <button class="pack-btn" onclick="selectPack(this,'fart')">💨 Pets</button>
-      <button class="pack-btn" onclick="selectPack(this,'punch')">🥊 Coups</button>
-      <button class="pack-btn" onclick="selectPack(this,'scream')">😱 Cris</button>
-    </div>
-  </div>
-
 <script>
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let ctx = null;
@@ -172,7 +151,6 @@ let sensitivity = 18;
 let cooldown = 600;
 let totalSlaps = 0;
 let maxIntensity = 0;
-let currentPack = 'moan';
 let lastSlap = 0;
 let lastMag = 0;
 
@@ -185,67 +163,17 @@ function getCtx() {
 function playSound(intensity) {
   const c = getCtx();
   const vol = Math.min(intensity / 40, 1);
-  const sounds = {
-    moan: () => {
-      [0, 0.05].forEach((delay, i) => {
-        const o = c.createOscillator();
-        const env = c.createGain();
-        o.type = 'sine';
-        o.frequency.setValueAtTime(200 - i * 20 + Math.random() * 80, c.currentTime + delay);
-        o.frequency.exponentialRampToValueAtTime(70 + Math.random() * 30, c.currentTime + delay + 0.55);
-        env.gain.setValueAtTime(vol * (i === 0 ? 0.8 : 0.5), c.currentTime + delay);
-        env.gain.exponentialRampToValueAtTime(0.001, c.currentTime + delay + 0.6);
-        o.connect(env); env.connect(c.destination);
-        o.start(c.currentTime + delay); o.stop(c.currentTime + delay + 0.6);
-      });
-    },
-    fart: () => {
-      const buf = c.createBuffer(1, c.sampleRate * 0.45, c.sampleRate);
-      const d = buf.getChannelData(0);
-      for (let i = 0; i < d.length; i++) {
-        d[i] = (Math.random() * 2 - 1) * Math.sin(i / c.sampleRate * Math.PI * 70) * Math.exp(-i / d.length * 5);
-      }
-      const src = c.createBufferSource();
-      src.buffer = buf;
-      const env = c.createGain();
-      env.gain.setValueAtTime(vol * 0.7, c.currentTime);
-      env.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.45);
-      src.connect(env); env.connect(c.destination);
-      src.start();
-    },
-    punch: () => {
-      const buf = c.createBuffer(1, c.sampleRate * 0.18, c.sampleRate);
-      const d = buf.getChannelData(0);
-      for (let i = 0; i < d.length; i++) {
-        d[i] = (Math.random() * 2 - 1) * Math.exp(-i / c.sampleRate * 35) * vol;
-      }
-      const src = c.createBufferSource(); src.buffer = buf;
-      src.connect(c.destination); src.start();
-      const o = c.createOscillator();
-      const env = c.createGain();
-      o.frequency.setValueAtTime(130, c.currentTime);
-      o.frequency.exponentialRampToValueAtTime(35, c.currentTime + 0.12);
-      env.gain.setValueAtTime(vol * 0.6, c.currentTime);
-      env.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.14);
-      o.connect(env); env.connect(c.destination);
-      o.start(); o.stop(c.currentTime + 0.14);
-    },
-    scream: () => {
-      const o = c.createOscillator();
-      const filt = c.createBiquadFilter();
-      const env = c.createGain();
-      o.type = 'sawtooth';
-      o.frequency.setValueAtTime(280 + Math.random() * 180, c.currentTime);
-      o.frequency.linearRampToValueAtTime(650 + Math.random() * 250, c.currentTime + 0.12);
-      o.frequency.exponentialRampToValueAtTime(180, c.currentTime + 0.5);
-      filt.type = 'bandpass'; filt.frequency.value = 1200; filt.Q.value = 3;
-      env.gain.setValueAtTime(vol * 0.55, c.currentTime);
-      env.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.5);
-      o.connect(filt); filt.connect(env); env.connect(c.destination);
-      o.start(); o.stop(c.currentTime + 0.5);
-    }
-  };
-  sounds[currentPack]();
+  [0, 0.05].forEach((delay, i) => {
+    const o = c.createOscillator();
+    const env = c.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(200 - i * 20 + Math.random() * 80, c.currentTime + delay);
+    o.frequency.exponentialRampToValueAtTime(70 + Math.random() * 30, c.currentTime + delay + 0.55);
+    env.gain.setValueAtTime(vol * (i === 0 ? 0.8 : 0.5), c.currentTime + delay);
+    env.gain.exponentialRampToValueAtTime(0.001, c.currentTime + delay + 0.6);
+    o.connect(env); env.connect(c.destination);
+    o.start(c.currentTime + delay); o.stop(c.currentTime + delay + 0.6);
+  });
 }
 
 function triggerSlap(intensity) {
@@ -269,11 +197,6 @@ function triggerSlap(intensity) {
 function manualSlap() { triggerSlap(22 + Math.random() * 18); }
 function updateSens(v) { sensitivity = parseFloat(v); document.getElementById('sens-val').textContent = Math.round(v); }
 function updateCd(v) { cooldown = parseInt(v); document.getElementById('cd-val').textContent = v + ' ms'; }
-function selectPack(btn, pack) {
-  document.querySelectorAll('.pack-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  currentPack = pack;
-}
 
 function handleMotion(e) {
   const acc = e.accelerationIncludingGravity || e.acceleration;
@@ -308,7 +231,7 @@ function setStatus(msg, active) {
 if (typeof DeviceMotionEvent !== 'undefined') {
   if (typeof DeviceMotionEvent.requestPermission === 'function') {
     document.getElementById('permission-banner').style.display = 'block';
-    setStatus('Clique le bouton orange pour activer', false);
+    setStatus('Clique le bouton rose pour activer', false);
   } else {
     startListening();
   }
